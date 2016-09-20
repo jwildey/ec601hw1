@@ -93,12 +93,15 @@ def quit(s, code=0):
 
 def print_help():
     help = """
-Usage: httpstat URL [CURL_OPTIONS]
+Usage: httpstat
+       httpstat URL [CURL_OPTIONS]
        httpstat -h | --help
        httpstat --version
 
 Arguments:
   URL     url to request, could be with or without `http(s)://` prefix
+  
+  If no arguments are provided, the user will be prompted with instructions.
 
 Options:
   CURL_OPTIONS  any curl supported options, except for -w -D -o -S -s,
@@ -114,15 +117,26 @@ Environments:
 """[1:-1]
     print(help)
 
+def print_prompts():
+    message = """
+No arugments were given.
+Please type in the URL to run httpstat on 
+as well as any curl options necessary or
+type help for usage.
+
+URL: """
+    print(message, end="")
+    args = input()
+    return args.split()
 
 def main():
     args = sys.argv[1:]
     if not args:
-        print_help()
-        quit(None, 0)
+        args = print_prompts()
+        #quit(None, 0)
 
     url = args[0]
-    if url in ['-h', '--help']:
+    if url in ['-h', '--help', 'help', 'HELP']:
         print_help()
         quit(None, 0)
     elif url == '--version':
